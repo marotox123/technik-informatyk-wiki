@@ -4,7 +4,10 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 
 ## Start
 
-- [Pełna powtórka i wszystkie komendy](docs/Powtorka.md)
+- [📚 Spis oddzielnych tematów](docs/README.md) — najlepszy sposób nauki działami
+- [🌐 Ethernet i okablowanie miedziane](docs/topics/07-ethernet-i-okablowanie-miedziane.md)
+- [💡 Światłowody](docs/topics/21-swiatlowody.md)
+- [Pełna powtórka w jednym pliku](docs/Powtorka.md)
 - [Plan nauki](#plan-nauki)
 - [Najważniejsze działy](#najważniejsze-działy)
 
@@ -14,6 +17,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 |---|---|
 | Sieci | OSI, TCP/IP, DHCP, DNS, NAT, urządzenia i diagnostyka |
 | Okablowanie | T568A, T568B, przewód prosty i krosowany |
+| Ethernet | ramki, MAC, standardy, kategorie skrętki, ekranowanie, PoE i diagnostyka |
 | IPv4 | maski, hosty, broadcast i Magiczna Piłeczkowa Metoda |
 | Systemy liczbowe | BIN ↔ DEC metodą wag oraz szybka zamiana BIN ↔ HEX |
 | Windows | `net user`, `net localgroup`, `net share`, `net use`, `icacls` |
