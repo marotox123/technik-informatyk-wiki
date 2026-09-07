@@ -9,6 +9,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 - [🌐 Ethernet i okablowanie miedziane](docs/topics/07-ethernet-i-okablowanie-miedziane.md)
 - [💡 Światłowody](docs/topics/21-swiatlowody.md)
 - [Pełna powtórka w jednym pliku](docs/Powtorka.md)
+- [📄 Materiał PDF — Almanach poleceń Linux](materialy-pdf/README.md)
 - [Plan nauki](#plan-nauki)
 - [Najważniejsze działy](#najważniejsze-działy)
 
