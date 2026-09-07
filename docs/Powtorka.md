@@ -385,7 +385,66 @@ ostatni:   172.20.79.254
 9. Broadcast - 1 = ostatni host.
 ```
 
-## 5. Osobna szybka metoda BIN↔HEX
+## 5. Systemy liczbowe — BIN, DEC i HEX
+
+### 1. Zamiana z binarnego na dziesiętny — metoda „Suma wag”
+
+Każda pozycja w ośmiobitowej liczbie binarnej ma stałą wartość, czyli wagę. Czytając od lewej do prawej, są to:
+
+```text
+128, 64, 32, 16, 8, 4, 2, 1
+```
+
+Są to kolejne potęgi liczby 2. Aby zamienić liczbę binarną na dziesiętną, zsumuj tylko te wagi, pod którymi znajduje się `1`.
+
+#### Przykład: `1010100₂` na system dziesiętny
+
+Liczba ma siedem bitów, więc zaczynamy od wagi `64`:
+
+| Waga | 64 | 32 | 16 | 8 | 4 | 2 | 1 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Bit | **1** | **0** | **1** | **0** | **1** | **0** | **0** |
+
+Jedynki stoją pod wagami `64`, `16` i `4`:
+
+```text
+64 + 16 + 4 = 84
+```
+
+Wynik:
+
+```text
+1010100₂ = 84₁₀
+```
+
+> Szybka zasada: bit `1` oznacza „dodaj tę wagę”, a bit `0` oznacza „pomiń tę wagę”.
+
+### 2. Zamiana z dziesiętnego na binarny — metoda „Odejmowanie wag”
+
+Zamiast dzielić liczbę przez 2 i zapisywać reszty, można kolejno sprawdzać, które potęgi dwójki mieszczą się w liczbie.
+
+#### Przykład: `53₁₀` na system binarny
+
+1. Największą wagą mieszczącą się w 53 jest `32`. Wpisujemy `1`: `53 - 32 = 21`.
+2. Waga `16` mieści się w 21. Wpisujemy `1`: `21 - 16 = 5`.
+3. Waga `8` nie mieści się w 5. Wpisujemy `0`.
+4. Waga `4` mieści się w 5. Wpisujemy `1`: `5 - 4 = 1`.
+5. Waga `2` nie mieści się w 1. Wpisujemy `0`.
+6. Waga `1` mieści się w 1. Wpisujemy `1`: `1 - 1 = 0`.
+
+| Waga | 32 | 16 | 8 | 4 | 2 | 1 |
+|---|---:|---:|---:|---:|---:|---:|
+| Bit | **1** | **1** | **0** | **1** | **0** | **1** |
+
+Wynik:
+
+```text
+53₁₀ = 110101₂
+```
+
+> Szybka zasada: jeżeli waga mieści się w pozostałej liczbie, wpisz `1` i ją odejmij. Jeżeli się nie mieści, wpisz `0` i przejdź do następnej wagi.
+
+### 3. Szybka metoda BIN↔HEX
 
 Grupuj bity po cztery od prawej strony:
 
@@ -905,6 +964,8 @@ broadcast - 1 = ostatni host
 18. Wyznacz sieć i broadcast dla `192.168.1.75/27`.
 19. Zamień `10110110₂` na HEX.
 20. Jak bezpiecznie sprawdzić konfigurację Netplanu przed jej trwałym zastosowaniem?
+21. Zamień `1010100₂` na system dziesiętny metodą sumy wag.
+22. Zamień `53₁₀` na system binarny metodą odejmowania wag.
 
 ### Odpowiedzi
 
@@ -928,3 +989,5 @@ broadcast - 1 = ostatni host
 18. Sieć `192.168.1.64`, broadcast `192.168.1.95`.
 19. `B6₁₆`.
 20. `sudo netplan generate`, a następnie `sudo netplan try`.
+21. `64 + 16 + 4 = 84`, więc `1010100₂ = 84₁₀`.
+22. Wagi `32 + 16 + 4 + 1 = 53`, więc `53₁₀ = 110101₂`.

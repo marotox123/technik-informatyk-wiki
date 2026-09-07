@@ -15,7 +15,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 | Sieci | OSI, TCP/IP, DHCP, DNS, NAT, urządzenia i diagnostyka |
 | Okablowanie | T568A, T568B, przewód prosty i krosowany |
 | IPv4 | maski, hosty, broadcast i Magiczna Piłeczkowa Metoda |
-| Systemy liczbowe | szybka zamiana BIN i HEX |
+| Systemy liczbowe | BIN ↔ DEC metodą wag oraz szybka zamiana BIN ↔ HEX |
 | Windows | `net user`, `net localgroup`, `net share`, `net use`, `icacls` |
 | Linux | `useradd`, `groupadd`, `usermod`, `chmod`, `chown`, `tar` i pliki `/etc` |
 | Netplan | DHCP, adres statyczny, trasy, DNS i bezpieczne stosowanie YAML |
