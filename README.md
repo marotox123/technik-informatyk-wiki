@@ -20,6 +20,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 | Linux | konta, prawa, wildcardy, pipe’y, przekierowania, `touch`, `cp`, `rm`, `mv`, `tar` i pliki `/etc` |
 | Netplan | DHCP, adres statyczny, trasy, DNS i bezpieczne stosowanie YAML |
 | Drukarki | dodawanie drukarki sieciowej przez port TCP/IP |
+| Światłowody | SM/MM, złącza, SFP, tłumienie, spawanie, pomiary OTDR i bezpieczeństwo |
 
 ## Plan nauki
 
@@ -41,6 +42,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 - [ ] Prawa i pliki systemowe Linux
 - [ ] Netplan
 - [ ] Diagnostyka
+- [ ] Światłowody
 - [ ] Test końcowy
 
 ## Zasada bezpieczeństwa
