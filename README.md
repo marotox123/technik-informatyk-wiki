@@ -5,6 +5,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 ## Start
 
 - [📚 Spis oddzielnych tematów](docs/README.md) — najlepszy sposób nauki działami
+- [🔢 Jednostki i systemy liczenia](docs/topics/00-jednostki-i-systemy-liczenia.md)
 - [🌐 Ethernet i okablowanie miedziane](docs/topics/07-ethernet-i-okablowanie-miedziane.md)
 - [💡 Światłowody](docs/topics/21-swiatlowody.md)
 - [Pełna powtórka w jednym pliku](docs/Powtorka.md)

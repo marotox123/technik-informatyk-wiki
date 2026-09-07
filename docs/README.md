@@ -2,6 +2,7 @@
 
 Każdy temat znajduje się w osobnym pliku, dzięki czemu można uczyć się działami.
 
+0. [Jednostki i systemy liczenia](topics/00-jednostki-i-systemy-liczenia.md)
 1. [1. Netplan — poprawny YAML do wklejenia](topics/01-netplan-poprawny-yaml-do-wklejenia.md)
 2. [2. Linux — tworzenie użytkowników przez useradd](topics/02-linux-tworzenie-uzytkownikow-przez-useradd.md)
 3. [3. groupadd — tworzenie grup](topics/03-groupadd-tworzenie-grup.md)
