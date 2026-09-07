@@ -1060,6 +1060,168 @@ tail -f /var/log/syslog
 - `head` pokazuje początek pliku.
 - `tail` pokazuje koniec, a `tail -f` śledzi dopisywane linie.
 
+### Pipe `|` — łączenie poleceń w potok
+
+Pipe, czyli pionowa kreska `|`, przekazuje standardowe wyjście jednej komendy na standardowe wejście następnej komendy.
+
+Schemat:
+
+```text
+polecenie1 | polecenie2 | polecenie3
+```
+
+Każde polecenie przetwarza wynik poprzedniego. Dane nie muszą być najpierw zapisywane w pliku tymczasowym.
+
+Najprostszy przykład:
+
+```bash
+ls -la | less
+```
+
+1. `ls -la` tworzy długą listę plików.
+2. Pipe `|` przekazuje tę listę do `less`.
+3. `less` pozwala wygodnie ją przewijać. Klawisz `q` kończy podgląd.
+
+#### Filtrowanie przez `grep`
+
+```bash
+ls -la | grep ".txt"
+ps aux | grep firefox
+ip addr | grep "inet "
+cat /etc/passwd | grep bash
+```
+
+`grep` zostawia tylko linie zawierające podany tekst. Ostatni przykład można zapisać prościej bez `cat`:
+
+```bash
+grep bash /etc/passwd
+```
+
+Przydatne opcje `grep`:
+
+| Opcja | Znaczenie |
+|---|---|
+| `-i` | ignoruj wielkość liter |
+| `-v` | pokaż linie, które nie pasują |
+| `-n` | pokaż numery linii |
+| `-r` | szukaj rekurencyjnie w katalogach |
+| `-E` | użyj rozszerzonych wyrażeń regularnych |
+| `-c` | pokaż liczbę pasujących linii |
+
+```bash
+grep -in "error" aplikacja.log
+grep -r "adres IP" ~/Dokumenty
+ps aux | grep -v grep | grep firefox
+```
+
+#### Sortowanie i usuwanie powtórzeń
+
+```bash
+cat imiona.txt | sort
+cat imiona.txt | sort | uniq
+cat imiona.txt | sort | uniq -c
+```
+
+- `sort` sortuje linie.
+- `uniq` usuwa sąsiadujące, powtarzające się linie.
+- Dlatego przed `uniq` często używa się `sort`.
+- `uniq -c` dodatkowo liczy wystąpienia.
+
+Przykład analizy powłok użytkowników:
+
+```bash
+cut -d: -f7 /etc/passwd | sort | uniq -c
+```
+
+1. `cut -d: -f7` wybiera siódme pole rozdzielone dwukropkiem, czyli powłokę.
+2. `sort` grupuje takie same wartości obok siebie.
+3. `uniq -c` liczy wystąpienia każdej powłoki.
+
+#### Liczenie przez `wc`
+
+```bash
+ls -1 | wc -l
+grep -i "error" aplikacja.log | wc -l
+cat tekst.txt | wc -w
+```
+
+| Opcja `wc` | Co liczy |
+|---|---|
+| `-l` | linie |
+| `-w` | słowa |
+| `-c` | bajty |
+| `-m` | znaki |
+
+#### Wybieranie początku i końca wyniku
+
+```bash
+ps aux | head -n 5
+ls -lh | tail -n 10
+journalctl | tail -n 20
+```
+
+- `head -n 5` zachowuje pierwszych pięć linii.
+- `tail -n 10` zachowuje ostatnich dziesięć linii.
+
+#### `tee` — pokaż wynik i jednocześnie zapisz go do pliku
+
+```bash
+ip addr | tee adresy.txt
+ip route | tee -a diagnostyka.txt
+```
+
+- `tee plik` nadpisuje plik i jednocześnie pokazuje wynik w terminalu.
+- `tee -a plik` dopisuje dane na końcu.
+
+Gdy zapis wymaga uprawnień administratora, `sudo` należy zastosować do `tee`:
+
+```bash
+echo "192.168.10.20 serwer" | sudo tee -a /etc/hosts
+```
+
+Samo `sudo echo ... > /etc/hosts` może nie zadziałać, ponieważ przekierowanie wykonuje bieżąca powłoka, a nie polecenie uruchomione przez `sudo`.
+
+#### Pipe a przekierowania — różnica
+
+| Operator | Działanie |
+|---|---|
+| `|` | przekaż wynik do następnego polecenia |
+| `>` | zapisz wynik do pliku, nadpisując go |
+| `>>` | dopisz wynik na końcu pliku |
+| `<` | pobierz wejście z pliku |
+| `2>` | zapisz błędy do pliku |
+| `2>&1` | połącz strumień błędów ze standardowym wyjściem |
+
+Przykłady:
+
+```bash
+ls -la > lista.txt
+date >> dziennik.txt
+sort < imiona.txt
+find /etc -name "*.conf" 2> bledy.txt
+find /etc -name "*.conf" > wyniki.txt 2>&1
+```
+
+Pipe nie zapisuje automatycznie danych w pliku. Przekierowanie `>` zapisuje wynik i nadpisuje dotychczasową zawartość. `>>` dopisuje wynik.
+
+#### Kilka praktycznych potoków
+
+```bash
+# Dziesięć największych elementów w bieżącym katalogu
+du -ah . | sort -hr | head -n 10
+
+# Liczba aktywnych procesów użytkownika
+ps -u "$USER" --no-headers | wc -l
+
+# Unikalne adresy IP z pierwszej kolumny pliku
+cut -d' ' -f1 access.log | sort | uniq -c | sort -nr
+
+# Wyszukanie nasłuchujących portów TCP
+ss -tln | grep LISTEN
+```
+
+> Potok może zawierać wiele etapów, ale każdy powinien mieć jasne zadanie. Najpierw uruchom poszczególne polecenia osobno, a dopiero potem połącz je pipe’ami.
+
 ### `tar`, `alias`, `whoami` i `source`
 
 ```bash
@@ -1174,6 +1336,11 @@ broadcast - 1 = ostatni host
 25. Utwórz pięć pustych plików od `raport1.txt` do `raport5.txt`.
 26. Skopiuj rekurencyjnie katalog `projekt` jako `projekt_kopia`.
 27. Usuń katalog `stary` wraz z zawartością, ale pytaj przed usuwaniem.
+28. Wyświetl szczegółową listę plików przez program `less` przy użyciu pipe’a.
+29. Policz linie zawierające słowo `error` w pliku `aplikacja.log`, ignorując wielkość liter.
+30. Posortuj plik `imiona.txt`, usuń powtórzenia i policz wystąpienia.
+31. Czym różnią się operatory `>`, `>>` i `|`?
+32. Pokaż wynik `ip addr` i jednocześnie zapisz go do `adresy.txt`.
 
 ### Odpowiedzi
 
@@ -1204,3 +1371,8 @@ broadcast - 1 = ostatni host
 25. `touch raport{1..5}.txt`.
 26. `cp -r projekt projekt_kopia`.
 27. `rm -ri stary`.
+28. `ls -la | less`.
+29. `grep -i "error" aplikacja.log | wc -l`.
+30. `sort imiona.txt | uniq -c`.
+31. `>` nadpisuje plik, `>>` dopisuje do pliku, a `|` przekazuje wyjście do następnego polecenia.
+32. `ip addr | tee adresy.txt`.
