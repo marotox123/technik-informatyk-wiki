@@ -17,7 +17,7 @@ Moja osobista baza wiedzy do nauki zawodu technika informatyka.
 | IPv4 | maski, hosty, broadcast i Magiczna Piłeczkowa Metoda |
 | Systemy liczbowe | BIN ↔ DEC metodą wag oraz szybka zamiana BIN ↔ HEX |
 | Windows | `net user`, `net localgroup`, `net share`, `net use`, `icacls` |
-| Linux | `useradd`, `groupadd`, `usermod`, `chmod`, `chown`, `tar` i pliki `/etc` |
+| Linux | konta, prawa, wildcardy, `touch`, `cp`, `rm`, `mv`, `tar` i pliki `/etc` |
 | Netplan | DHCP, adres statyczny, trasy, DNS i bezpieczne stosowanie YAML |
 | Drukarki | dodawanie drukarki sieciowej przez port TCP/IP |
 

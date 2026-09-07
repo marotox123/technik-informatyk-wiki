@@ -857,7 +857,210 @@ resolvectl status
 
 Nie edytuj ręcznie `/etc/shadow`. Do kont i haseł używaj `useradd`, `usermod`, `passwd` oraz `chage`.
 
-## 17. Linux — ls, cp, tar, alias, whoami i source
+## 17. Linux — pliki, wildcardy i codzienne komendy
+
+### Ścieżki, które trzeba znać
+
+| Zapis | Znaczenie |
+|---|---|
+| `/` | główny katalog systemu |
+| `.` | bieżący katalog |
+| `..` | katalog nadrzędny |
+| `~` | katalog domowy aktualnego użytkownika |
+| `~/Dokumenty` | katalog `Dokumenty` we własnym katalogu domowym |
+| `/etc/hosts` | ścieżka bezwzględna, rozpoczynająca się od `/` |
+| `projekt/plik.txt` | ścieżka względna, liczona od bieżącego katalogu |
+
+Sprawdzenie miejsca i zmiana katalogu:
+
+```bash
+pwd
+cd /etc
+cd ..
+cd ~
+cd -
+```
+
+- `pwd` pokazuje pełną ścieżkę bieżącego katalogu.
+- `cd ..` przechodzi poziom wyżej.
+- `cd ~` wraca do katalogu domowego.
+- `cd -` wraca do poprzedniego katalogu.
+
+### Wildcardy — znaki wieloznaczne
+
+Wildcardy są rozwijane przez powłokę jeszcze przed uruchomieniem komendy. Pozwalają wskazywać wiele nazw bez wypisywania każdej osobno.
+
+| Wildcard | Znaczenie | Przykład dopasowania |
+|---|---|---|
+| `*` | dowolna liczba dowolnych znaków, również zero | `*.txt` → wszystkie pliki kończące się na `.txt` |
+| `?` | dokładnie jeden dowolny znak | `plik?.txt` → `plik1.txt`, ale nie `plik10.txt` |
+| `[abc]` | dokładnie jeden znak z podanego zestawu | `plik[123].txt` |
+| `[a-z]` | dokładnie jeden znak z zakresu | `raport[a-c].txt` |
+| `[!abc]` | jeden znak, którego nie ma w zestawie | `plik[!0].txt` |
+
+Przykłady:
+
+```bash
+ls *.txt
+ls raport?.pdf
+ls zdjecie[1-5].jpg
+cp *.txt kopie/
+```
+
+Przed użyciem wildcardu z `cp`, `mv` albo `rm` najpierw sprawdź dopasowanie przez `ls`:
+
+```bash
+ls *.log
+```
+
+> Ważne: nazwa zaczynająca się od kropki jest ukryta. Samo `*` zwykle jej nie dopasuje. Do wyświetlania ukrytych plików użyj `ls -a`.
+
+### `ls` — wyświetlanie zawartości katalogu
+
+```bash
+ls
+ls -l
+ls -a
+ls -la
+ls -lh
+ls -R katalog
+ls -ld katalog
+```
+
+| Opcja | Znaczenie |
+|---|---|
+| `-l` | widok szczegółowy: prawa, właściciel, rozmiar i data |
+| `-a` | pokaż również pliki ukryte |
+| `-h` | rozmiary czytelne dla człowieka, np. KiB lub MiB; zwykle z `-l` |
+| `-R` | wyświetlaj również zawartość podkatalogów |
+| `-d` | pokaż sam katalog zamiast jego zawartości |
+
+### `touch` — tworzenie pustego pliku i zmiana czasu
+
+Jeżeli plik nie istnieje, `touch` tworzy pusty plik. Jeżeli istnieje, aktualizuje jego czasy dostępu i modyfikacji bez usuwania zawartości.
+
+```bash
+touch notatka.txt
+touch plik1.txt plik2.txt plik3.txt
+touch raport{1..5}.txt
+touch -a plik.txt
+touch -m plik.txt
+touch -t 202609071530 plik.txt
+```
+
+| Opcja | Znaczenie |
+|---|---|
+| `-a` | zmień tylko czas ostatniego dostępu |
+| `-m` | zmień tylko czas ostatniej modyfikacji |
+| `-c` | nie twórz pliku, jeżeli nie istnieje |
+| `-t CZAS` | ustaw podany czas w formacie `[[CC]YY]MMDDhhmm[.ss]` |
+| `-r PLIK` | skopiuj znaczniki czasu z innego pliku |
+
+### `cp` — kopiowanie plików i katalogów
+
+Podstawowa składnia:
+
+```text
+cp [opcje] źródło cel
+```
+
+Przykłady:
+
+```bash
+cp notatka.txt kopia.txt
+cp notatka.txt ~/Dokumenty/
+cp plik1.txt plik2.txt kopie/
+cp *.txt kopie/
+cp -r projekt projekt_kopia
+cp -a projekt projekt_kopia
+cp -i wazny.txt kopia.txt
+cp -v raport.txt kopie/
+```
+
+| Opcja | Znaczenie |
+|---|---|
+| `-r`, `-R` | kopiuj katalog wraz z zawartością |
+| `-a` | tryb archiwalny: zachowaj strukturę i możliwie dużo atrybutów |
+| `-i` | zapytaj przed nadpisaniem istniejącego pliku |
+| `-n` | nie nadpisuj istniejących plików |
+| `-u` | kopiuj, gdy źródło jest nowsze albo celu nie ma |
+| `-v` | pokazuj kopiowane elementy |
+| `-p` | zachowaj czasy, tryb i — gdy to możliwe — właściciela |
+
+> Gdy kopiujesz wiele plików, ostatni argument musi być istniejącym katalogiem docelowym.
+
+### `rm` — usuwanie plików i katalogów
+
+`rm` usuwa elementy bez przenoszenia ich do kosza. W terminalu zwykle nie ma prostego „cofnij”.
+
+```bash
+rm notatka.txt
+rm -i notatka.txt
+rm -v *.tmp
+rm -r stary_katalog
+rm -ri stary_katalog
+```
+
+| Opcja | Znaczenie |
+|---|---|
+| `-i` | pytaj przed każdym usunięciem |
+| `-I` | jedno dodatkowe ostrzeżenie przy większej operacji |
+| `-r`, `-R` | usuń katalog i całą jego zawartość |
+| `-f` | wymuś operację i nie pytaj; używaj bardzo ostrożnie |
+| `-v` | pokazuj usuwane elementy |
+
+Bezpieczny szkolny schemat:
+
+```bash
+pwd
+ls stary_katalog
+rm -ri stary_katalog
+```
+
+> Nigdy nie wpisuj przypadkowo `rm -rf` z szeroką, niesprawdzoną ścieżką. Połączenie `-r` i `-f` może bez pytań usunąć całe drzewo katalogów.
+
+### `mkdir` i `rmdir` — katalogi
+
+```bash
+mkdir projekt
+mkdir -p projekt/dokumentacja/notatki
+mkdir -m 750 prywatne
+rmdir pusty_katalog
+```
+
+- `mkdir -p` tworzy również brakujące katalogi nadrzędne.
+- `mkdir -m 750` od razu ustawia prawa nowego katalogu.
+- `rmdir` usuwa tylko pusty katalog.
+
+### `mv` — przenoszenie i zmiana nazwy
+
+```bash
+mv stara.txt nowa.txt
+mv raport.txt Dokumenty/
+mv -i raport.txt Dokumenty/
+mv -v *.txt archiwum/
+```
+
+- `-i` pyta przed nadpisaniem.
+- `-n` nie nadpisuje istniejącego celu.
+- `-v` pokazuje wykonywane operacje.
+
+### `cat`, `less`, `head` i `tail` — czytanie plików
+
+```bash
+cat notatka.txt
+less /var/log/syslog
+head -n 10 plik.txt
+tail -n 20 plik.txt
+tail -f /var/log/syslog
+```
+
+- `cat` wypisuje cały plik.
+- `less` pozwala wygodnie przewijać; klawisz `q` kończy program.
+- `head` pokazuje początek pliku.
+- `tail` pokazuje koniec, a `tail -f` śledzi dopisywane linie.
+
+### `tar`, `alias`, `whoami` i `source`
 
 ```bash
 ls
@@ -966,6 +1169,11 @@ broadcast - 1 = ostatni host
 20. Jak bezpiecznie sprawdzić konfigurację Netplanu przed jej trwałym zastosowaniem?
 21. Zamień `1010100₂` na system dziesiętny metodą sumy wag.
 22. Zamień `53₁₀` na system binarny metodą odejmowania wag.
+23. Jaki wildcard dopasuje wszystkie pliki kończące się na `.txt`?
+24. Jaka jest różnica między wildcardami `*` i `?`?
+25. Utwórz pięć pustych plików od `raport1.txt` do `raport5.txt`.
+26. Skopiuj rekurencyjnie katalog `projekt` jako `projekt_kopia`.
+27. Usuń katalog `stary` wraz z zawartością, ale pytaj przed usuwaniem.
 
 ### Odpowiedzi
 
@@ -991,3 +1199,8 @@ broadcast - 1 = ostatni host
 20. `sudo netplan generate`, a następnie `sudo netplan try`.
 21. `64 + 16 + 4 = 84`, więc `1010100₂ = 84₁₀`.
 22. Wagi `32 + 16 + 4 + 1 = 53`, więc `53₁₀ = 110101₂`.
+23. `*.txt`.
+24. `*` dopasowuje dowolną liczbę znaków, a `?` dokładnie jeden znak.
+25. `touch raport{1..5}.txt`.
+26. `cp -r projekt projekt_kopia`.
+27. `rm -ri stary`.
